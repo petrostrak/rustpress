@@ -1,6 +1,8 @@
 use std::{collections::HashMap, error::Error, fs};
 
 use clap::Parser;
+use tree::BinaryTree;
+mod tree;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -32,8 +34,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // determine the frequency of each character occurring within the text.
     let results = find_frequency_of_each_char(file).ok_or("No occurrences")?;
-    for (k, v) in results {
-        println!("{k} : {v}")
+
+    // Build a binary tree the the frequencies
+    let mut tree: BinaryTree<u64> = BinaryTree::new();
+
+    for v in results.into_values() {
+        tree.insert(v);
     }
 
     Ok(())
