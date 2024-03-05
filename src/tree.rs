@@ -5,6 +5,7 @@ struct Node<T: Ord> {
     key: char,
     value: T,
     code: String,
+    occurrence: usize,
     left: Subtree<T>,
     right: Subtree<T>,
 }
@@ -29,8 +30,8 @@ impl<T: Ord> BinaryTree<T> {
     }
 
     pub fn insert(&mut self, key: char, value: T) {
-        println!("{} - {}", key, self.code);
         self.root.insert(key, value, &mut self.code);
+        println!("{} - {}", key, self.code);
     }
 
     fn has(&self, value: &T) -> bool {
@@ -56,7 +57,9 @@ impl<T: Ord> Subtree<T> {
                     n.code = code.clone();
                     n.left.insert(key, value, &mut n.code);
                 }
-                Ordering::Equal => {}
+                Ordering::Equal => {
+                    n.occurrence += 1;
+                }
                 Ordering::Greater => {
                     code.push_str("1");
                     n.code = code.clone();
@@ -91,6 +94,7 @@ impl<T: Ord> Node<T> {
             key,
             value,
             code,
+            occurrence: 0,
             left: Subtree::new(),
             right: Subtree::new(),
         }
