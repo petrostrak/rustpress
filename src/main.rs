@@ -38,9 +38,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Build a binary tree the the frequencies
     let mut tree: BinaryTree<u64> = BinaryTree::new();
 
-    for v in results.into_values() {
-        tree.insert(v);
+    for (k, v) in results.into_iter() {
+        tree.insert(k, v);
     }
+
+    // Use the tree to generate the prefix-code table
 
     Ok(())
 }

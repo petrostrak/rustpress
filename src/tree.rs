@@ -2,6 +2,7 @@ use std::cmp::Ordering;
 
 #[derive(Debug)]
 struct Node<T: Ord> {
+    key: char,
     value: T,
     left: Subtree<T>,
     right: Subtree<T>,
@@ -22,8 +23,8 @@ impl<T: Ord> BinaryTree<T> {
         }
     }
 
-    pub fn insert(&mut self, value: T) {
-        self.root.insert(value);
+    pub fn insert(&mut self, key: char, value: T) {
+        self.root.insert(key, value);
     }
 
     fn has(&self, value: &T) -> bool {
@@ -40,13 +41,13 @@ impl<T: Ord> Subtree<T> {
         Self(None)
     }
 
-    fn insert(&mut self, value: T) {
+    fn insert(&mut self, key: char, value: T) {
         match &mut self.0 {
-            None => self.0 = Some(Box::new(Node::new(value))),
+            None => self.0 = Some(Box::new(Node::new(key, value))),
             Some(n) => match value.cmp(&n.value) {
-                Ordering::Less => n.left.insert(value),
+                Ordering::Less => n.left.insert(key, value),
                 Ordering::Equal => {}
-                Ordering::Greater => n.right.insert(value),
+                Ordering::Greater => n.right.insert(key, value),
             },
         }
     }
@@ -71,8 +72,9 @@ impl<T: Ord> Subtree<T> {
 }
 
 impl<T: Ord> Node<T> {
-    fn new(value: T) -> Self {
+    fn new(key: char, value: T) -> Self {
         Self {
+            key,
             value,
             left: Subtree::new(),
             right: Subtree::new(),
