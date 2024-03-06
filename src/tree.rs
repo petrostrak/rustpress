@@ -5,7 +5,7 @@ struct Node<T: Ord> {
     key: char,
     value: T,
     code: String,
-    occurrence: usize,
+    occurrences: usize,
     left: Subtree<T>,
     right: Subtree<T>,
 }
@@ -55,14 +55,16 @@ impl<T: Ord> Subtree<T> {
                 Ordering::Less => {
                     code.push_str("0");
                     n.code = code.clone();
+                    n.key = key;
                     n.left.insert(key, value, &mut n.code);
                 }
                 Ordering::Equal => {
-                    n.occurrence += 1;
+                    n.occurrences += 1;
                 }
                 Ordering::Greater => {
                     code.push_str("1");
                     n.code = code.clone();
+                    n.key = key;
                     n.right.insert(key, value, &mut n.code);
                 }
             },
@@ -94,7 +96,7 @@ impl<T: Ord> Node<T> {
             key,
             value,
             code,
-            occurrence: 0,
+            occurrences: 0,
             left: Subtree::new(),
             right: Subtree::new(),
         }
